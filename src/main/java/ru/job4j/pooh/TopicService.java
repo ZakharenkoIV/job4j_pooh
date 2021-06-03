@@ -1,5 +1,6 @@
 package ru.job4j.pooh;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TopicService implements Service {
@@ -7,20 +8,20 @@ public class TopicService implements Service {
 
     @Override
     public Resp process(Req req) {
-        String text = "";
+        Optional<String> text = Optional.empty();
         int status = 403;
-        if (req.method().equals("POST")) {
+        if (POST.equals(req.method())) {
             for (CASMap casMap : clientIdMap.values()) {
                 casMap.add(req);
             }
             status = 204;
         }
-        if (req.method().equals("GET")) {
-            CASMap casMap = clientIdMap.get(req.clientId());
-            text = (casMap != null) ? casMap.extract(req.name()) : "null";
-            status = (text != null && !text.equals("null")) ? 200 : 404;
+        if (GET.equals(req.method())) {
+            Optional<CASMap> casMap = Optional.ofNullable(clientIdMap.get(req.clientId()));
+            text = Optional.ofNullable(casMap.orElse(new CASMap()).extract(req.name()));
+            status = text.isPresent() ? 200 : 404;
         }
-        return new Resp(text, status);
+        return new Resp(text.orElse(""), status);
     }
 
     public boolean subscribe(String clientId) {

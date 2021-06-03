@@ -13,7 +13,6 @@ public class CASMap {
     }
 
     public String extract(String name) {
-        ConcurrentLinkedQueue<String> q = queue.get(name);
-        return (q != null) ? q.poll() : "null";
+        return queue.getOrDefault(name, new ConcurrentLinkedQueue<>()).poll();
     }
 }

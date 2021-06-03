@@ -17,10 +17,10 @@ public class Req {
 
     public static Req of(String content) {
         String[] firstLine = content.split("\\R", 1)[0].split("[\\s]");
-        String method               = firstLine.length > 0 ? firstLine[0] : "null";
-        String[] path               = firstLine.length > 1 ? firstLine[1].split("/") : null;
-        String mode     = (path != null && path.length > 1) ? path[1] : "null";
-        String name     = (path != null && path.length > 2) ? path[2] : "null";
+        String method = firstLine.length > 0 ? firstLine[0] : "null";
+        String[] path = firstLine.length > 1 ? firstLine[1].split("/") : null;
+        String mode = (path != null && path.length > 1) ? path[1] : "null";
+        String name = (path != null && path.length > 2) ? path[2] : "null";
         String clientId = (path != null && path.length > 3) ? path[3] : "null";
         String[] betweenEmptyLines = content.split("(?m)^$");
         String[] textBody = (betweenEmptyLines.length > 1)
